@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
+	"github.com/dtan4/ecrcli/cmd"
 )
 
 func main() {
-	fmt.Println("hello")
+	cmd.Execute()
 }
