@@ -4,7 +4,9 @@ import (
 	"encoding/base64"
 	"fmt"
 	"strings"
+	"time"
 
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ecr"
 	"github.com/aws/aws-sdk-go/service/ecr/ecriface"
 	"github.com/pkg/errors"
@@ -13,6 +15,14 @@ import (
 // Client represents the wrapper of ECR API client
 type Client struct {
 	api ecriface.ECRAPI
+}
+
+// Repository represents the metadata of repository
+type Repository struct {
+	CreatedAt time.Time
+	Name      string
+	ARN       string
+	URI       string
 }
 
 // NewClient creates new Client object
@@ -46,4 +56,25 @@ func (c *Client) GetLogin() (string, error) {
 	}
 
 	return fmt.Sprintf("docker login -u %s -p %s -e none %s", ss[0], ss[1], *authData.ProxyEndpoint), nil
+}
+
+// ListRepositories returns the list of stored repositories
+func (c *Client) ListRepositories() ([]*Repository, error) {
+	resp, err := c.api.DescribeRepositories(&ecr.DescribeRepositoriesInput{})
+	if err != nil {
+		return []*Repository{}, errors.Wrap(err, "failed to retrieve repositories")
+	}
+
+	repositories := []*Repository{}
+
+	for _, repository := range resp.Repositories {
+		repositories = append(repositories, &Repository{
+			CreatedAt: aws.TimeValue(repository.CreatedAt),
+			Name:      aws.StringValue(repository.RepositoryName),
+			ARN:       aws.StringValue(repository.RepositoryArn),
+			URI:       aws.StringValue(repository.RepositoryUri),
+		})
+	}
+
+	return repositories, nil
 }
