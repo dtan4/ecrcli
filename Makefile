@@ -76,3 +76,7 @@ release:
 .PHONY: test
 test:
 	go test -cover -v $(NOVENDOR)
+
+.PHONY: update-deps
+update-deps: dep
+	dep ensure -update -v
