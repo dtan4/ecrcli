@@ -3,20 +3,21 @@
 
 [[projects]]
   name = "github.com/aws/aws-sdk-go"
-  packages = ["aws","aws/awserr","aws/awsutil","aws/client","aws/client/metadata","aws/corehandlers","aws/credentials","aws/credentials/ec2rolecreds","aws/credentials/endpointcreds","aws/credentials/stscreds","aws/defaults","aws/ec2metadata","aws/endpoints","aws/request","aws/session","aws/signer/v4","private/protocol","private/protocol/json/jsonutil","private/protocol/jsonrpc","private/protocol/query","private/protocol/query/queryutil","private/protocol/rest","private/protocol/xml/xmlutil","service/ecr","service/ecr/ecriface","service/sts"]
-  revision = "8cab5437f896c3048506422a6fb9f5a7f2df9944"
-  version = "v1.8.17"
+  packages = ["aws","aws/awserr","aws/awsutil","aws/client","aws/client/metadata","aws/corehandlers","aws/credentials","aws/credentials/ec2rolecreds","aws/credentials/endpointcreds","aws/credentials/stscreds","aws/defaults","aws/ec2metadata","aws/endpoints","aws/request","aws/session","aws/signer/v4","internal/shareddefaults","private/protocol","private/protocol/json/jsonutil","private/protocol/jsonrpc","private/protocol/query","private/protocol/query/queryutil","private/protocol/rest","private/protocol/xml/xmlutil","service/ecr","service/ecr/ecriface","service/sts"]
+  revision = "8da51c33f6001c4dda06a2561c2234be4cece1ed"
+  version = "v1.10.13"
 
 [[projects]]
   name = "github.com/go-ini/ini"
   packages = ["."]
-  revision = "2ba15ac2dc9cdf88c110ec2dc0ced7fa45f5678c"
+  revision = "d3de07a94d22b4a0972deb4b96d790c2c0ce8333"
+  version = "v1.28.0"
 
 [[projects]]
   branch = "master"
   name = "github.com/golang/mock"
   packages = ["gomock"]
-  revision = "bd3c8e81be01eef76d4b503f5e687d2d1354d2d9"
+  revision = "dbe9dea30dbc5b4b6d54c9ecf9a3b8f9b8e6556c"
 
 [[projects]]
   branch = "master"
@@ -25,10 +26,10 @@
   revision = "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
 
 [[projects]]
-  branch = "master"
   name = "github.com/jmespath/go-jmespath"
   packages = ["."]
-  revision = "bd40a432e4c76585ef6b72d3fd96fb9b6dc7b68d"
+  revision = "3433f3ea46d9f8019119e7dd41274e112a2359a9"
+  version = "0.2.2"
 
 [[projects]]
   name = "github.com/pkg/errors"
@@ -40,16 +41,17 @@
   branch = "master"
   name = "github.com/spf13/cobra"
   packages = ["."]
-  revision = "de09d9ce07d0d8a74442cfeaa91628cf9492cc23"
+  revision = "715f41bd7a70b5111f898b71ab484da52ee6266d"
 
 [[projects]]
+  branch = "master"
   name = "github.com/spf13/pflag"
   packages = ["."]
-  revision = "c7e63cf4530bcd3ba943729cee0efeff2ebea63f"
+  revision = "e57e3eeb33f795204c1ca35f56c44f83227c6e66"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "ab189c72dc0636c25fa3303e7844a433e78119024f609181c23602b70260b8f9"
+  inputs-digest = "74a7943b87b4ab07182d8e43b2d4a7514ebaac5d79440e2de8469b54b99fc27d"
   solver-name = "gps-cdcl"
   solver-version = 1
