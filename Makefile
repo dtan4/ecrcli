@@ -39,9 +39,15 @@ cross-build:
 		done; \
 	done
 
+.PHONY: dep
+dep:
+ifeq ($(shell command -v dep 2> /dev/null),)
+	go get -u github.com/golang/dep/cmd/dep
+endif
+
 .PHONY: deps
-deps: glide mockgen
-	glide install
+deps: dep mockgen
+	dep ensure -v
 
 .PHONY: dist
 dist:
@@ -51,12 +57,6 @@ dist:
 	$(DIST_DIRS) tar -zcf $(NAME)-$(VERSION)-{}.tar.gz {} \; && \
 	$(DIST_DIRS) zip -r $(NAME)-$(VERSION)-{}.zip {} \; && \
 	cd ..
-
-.PHONY: glide
-glide:
-ifeq ($(shell command -v glide 2> /dev/null),)
-	curl https://glide.sh/get | sh
-endif
 
 .PHONY: install
 install:
