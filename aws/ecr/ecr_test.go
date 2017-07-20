@@ -1,7 +1,6 @@
 package ecr
 
 import (
-	"reflect"
 	"testing"
 	"time"
 
