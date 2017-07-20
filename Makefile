@@ -42,7 +42,7 @@ cross-build:
 .PHONY: dep
 dep:
 ifeq ($(shell command -v dep 2> /dev/null),)
-	go get -u github.com/golang/dep/cmd/dep
+	go get -u -v github.com/golang/dep/cmd/dep
 endif
 
 .PHONY: deps
@@ -76,3 +76,7 @@ release:
 .PHONY: test
 test:
 	go test -cover -v $(NOVENDOR)
+
+.PHONY: update-deps
+update-deps: dep
+	dep ensure -update -v
