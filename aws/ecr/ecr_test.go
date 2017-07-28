@@ -28,7 +28,7 @@ func TestGetLogin(t *testing.T) {
 		api: api,
 	}
 
-	expected := "docker login -u username -p password -e none https://012345678910.dkr.ecr.us-east-1.amazonaws.com"
+	expected := "docker login -u username -p password https://012345678910.dkr.ecr.us-east-1.amazonaws.com"
 
 	got, err := client.GetLogin()
 	if err != nil {

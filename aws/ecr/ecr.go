@@ -64,7 +64,7 @@ func (c *Client) GetLogin() (string, error) {
 		return "", errors.Errorf("authorization data must be user:pass. got: %q", string(data))
 	}
 
-	return fmt.Sprintf("docker login -u %s -p %s -e none %s", ss[0], ss[1], *authData.ProxyEndpoint), nil
+	return fmt.Sprintf("docker login -u %s -p %s %s", ss[0], ss[1], *authData.ProxyEndpoint), nil
 }
 
 // ListImages returns the list of stored Docker images
