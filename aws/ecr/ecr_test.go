@@ -1,6 +1,7 @@
 package ecr
 
 import (
+	"reflect"
 	"testing"
 	"time"
 
@@ -39,7 +40,7 @@ func TestGetLogin(t *testing.T) {
 	}
 }
 
-func RTestListImages(t *testing.T) {
+func TestListImages(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -81,7 +82,7 @@ func RTestListImages(t *testing.T) {
 				ImagePushedAt:    aws.Time(pushedAt),
 			},
 		},
-	})
+	}, nil)
 	client := &Client{
 		api: api,
 	}
@@ -112,11 +113,9 @@ func RTestListImages(t *testing.T) {
 			PushedAt:    pushedAt,
 		},
 		&Image{
-			Repository: repository,
-			Digest:     "sha256:96cfebabbfb81b9e6bf8d03e6d2e0de0a236d429e885a00c68a2a8e17da7cf93",
-			Tags: []string{
-				"latest",
-			},
+			Repository:  repository,
+			Digest:      "sha256:96cfebabbfb81b9e6bf8d03e6d2e0de0a236d429e885a00c68a2a8e17da7cf93",
+			Tags:        []string{},
 			SizeInBytes: 186632884,
 			PushedAt:    pushedAt,
 		},
@@ -130,7 +129,11 @@ func RTestListImages(t *testing.T) {
 }
 
 func imageEquals(a, b *Image) bool {
-	return false
+	return a.Repository == b.Repository &&
+		a.Digest == b.Digest &&
+		reflect.DeepEqual(a.Tags, b.Tags) &&
+		a.SizeInBytes == b.SizeInBytes &&
+		a.PushedAt.Equal(b.PushedAt)
 }
 
 func TestListRepositories(t *testing.T) {
