@@ -17,6 +17,15 @@ type Client struct {
 	api ecriface.ECRAPI
 }
 
+// Image represents the metadata of Docker image
+type Image struct {
+	Repository  string
+	Digest      string
+	Tags        []string
+	SizeInBytes int64
+	PushedAt    time.Time
+}
+
 // Repository represents the metadata of repository
 type Repository struct {
 	CreatedAt time.Time
@@ -56,6 +65,30 @@ func (c *Client) GetLogin() (string, error) {
 	}
 
 	return fmt.Sprintf("docker login -u %s -p %s -e none %s", ss[0], ss[1], *authData.ProxyEndpoint), nil
+}
+
+// ListImages returns the list of stored Docker images
+func (c *Client) ListImages(repository string) ([]*Image, error) {
+	resp, err := c.api.DescribeImages(&ecr.DescribeImagesInput{
+		RepositoryName: aws.String(repository),
+	})
+	if err != nil {
+		return []*Image{}, errors.Wrap(err, "failed to retrieve images")
+	}
+
+	images := []*Image{}
+
+	for _, image := range resp.ImageDetails {
+		images = append(images, &Image{
+			Repository:  repository,
+			Digest:      aws.StringValue(image.ImageDigest),
+			Tags:        aws.StringValueSlice(image.ImageTags),
+			SizeInBytes: aws.Int64Value(image.ImageSizeInBytes),
+			PushedAt:    aws.TimeValue(image.ImagePushedAt),
+		})
+	}
+
+	return images, nil
 }
 
 // ListRepositories returns the list of stored repositories

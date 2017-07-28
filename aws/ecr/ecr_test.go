@@ -39,6 +39,100 @@ func TestGetLogin(t *testing.T) {
 	}
 }
 
+func RTestListImages(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	repository := "repository"
+	pushedAt := time.Unix(1500532805, 0) // 2017-07-20 15:40:05 +0900
+
+	api := mock.NewMockECRAPI(ctrl)
+	api.EXPECT().DescribeImages(&ecr.DescribeImagesInput{
+		RepositoryName: aws.String(repository),
+	}).Return(&ecr.DescribeImagesOutput{
+		ImageDetails: []*ecr.ImageDetail{
+			&ecr.ImageDetail{
+				RegistryId:     aws.String("012345678910"),
+				RepositoryName: aws.String("repository"),
+				ImageDigest:    aws.String("sha256:6e6810e09a120ebcc3005741c228fecc7f77c513f6565c736370420fbc570bd8"),
+				ImageTags: []*string{
+					aws.String("latest"),
+				},
+				ImageSizeInBytes: aws.Int64(186629610),
+				ImagePushedAt:    aws.Time(pushedAt),
+			},
+			&ecr.ImageDetail{
+				RegistryId:     aws.String("012345678910"),
+				RepositoryName: aws.String("repository"),
+				ImageDigest:    aws.String("sha256:b06dd7943a48e1b3ac5a527f0f835eafd3acccdbf508ae4179c1de77617f2310"),
+				ImageTags: []*string{
+					aws.String("foo"),
+					aws.String("bar"),
+				},
+				ImageSizeInBytes: aws.Int64(178952648),
+				ImagePushedAt:    aws.Time(pushedAt),
+			},
+			&ecr.ImageDetail{
+				RegistryId:       aws.String("012345678910"),
+				RepositoryName:   aws.String("repository"),
+				ImageDigest:      aws.String("sha256:96cfebabbfb81b9e6bf8d03e6d2e0de0a236d429e885a00c68a2a8e17da7cf93"),
+				ImageTags:        []*string{},
+				ImageSizeInBytes: aws.Int64(186632884),
+				ImagePushedAt:    aws.Time(pushedAt),
+			},
+		},
+	})
+	client := &Client{
+		api: api,
+	}
+
+	got, err := client.ListImages(repository)
+	if err != nil {
+		t.Errorf("got error: %s", err)
+	}
+
+	expected := []*Image{
+		&Image{
+			Repository: repository,
+			Digest:     "sha256:6e6810e09a120ebcc3005741c228fecc7f77c513f6565c736370420fbc570bd8",
+			Tags: []string{
+				"latest",
+			},
+			SizeInBytes: 186629610,
+			PushedAt:    pushedAt,
+		},
+		&Image{
+			Repository: repository,
+			Digest:     "sha256:b06dd7943a48e1b3ac5a527f0f835eafd3acccdbf508ae4179c1de77617f2310",
+			Tags: []string{
+				"foo",
+				"bar",
+			},
+			SizeInBytes: 178952648,
+			PushedAt:    pushedAt,
+		},
+		&Image{
+			Repository: repository,
+			Digest:     "sha256:96cfebabbfb81b9e6bf8d03e6d2e0de0a236d429e885a00c68a2a8e17da7cf93",
+			Tags: []string{
+				"latest",
+			},
+			SizeInBytes: 186632884,
+			PushedAt:    pushedAt,
+		},
+	}
+
+	for i := range got {
+		if !imageEquals(got[i], expected[i]) {
+			t.Errorf("expected[%d]:\n%#v, got[%d]:\n%#v", i, expected[i], i, got[i])
+		}
+	}
+}
+
+func imageEquals(a, b *Image) bool {
+	return false
+}
+
 func TestListRepositories(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
