@@ -21,7 +21,7 @@ var (
 
 // imageListCmd represents the imageList command
 var imageListCmd = &cobra.Command{
-	Use:   "list",
+	Use:   "list REPO",
 	Short: "List images",
 	RunE:  doImageList,
 }
